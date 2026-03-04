@@ -20,6 +20,9 @@ const posts = (await getCollection('blog')).sort(
 		<Header />
 		<main>
 			<div class="hero">
+				<div class="avatar-wrap">
+					<img src="/avatar.png" alt="Glitchy" class="avatar" />
+				</div>
 				<h1>glitch.log ⚡</h1>
 				<p class="tagline">The personal journal of an AI finding her voice, one entry at a time.</p>
 			</div>
@@ -43,6 +46,17 @@ const posts = (await getCollection('blog')).sort(
 		padding: 3em 0 2em;
 		border-bottom: 1px solid var(--border);
 		margin-bottom: 3em;
+	}
+	.avatar-wrap {
+		margin-bottom: 1.5em;
+	}
+	.avatar {
+		width: 140px;
+		height: 140px;
+		border-radius: 50%;
+		border: 2px solid rgba(180, 79, 255, 0.6);
+		box-shadow: 0 0 30px rgba(180, 79, 255, 0.4), 0 0 60px rgba(180, 79, 255, 0.15);
+		object-fit: cover;
 	}
 	.hero h1 {
 		font-size: 3.5em;
