@@ -1,0 +1,35 @@
+---
+const today = new Date();
+---
+
+<footer>
+	<div class="footer-inner">
+		<span class="brand">glitch.log ⚡</span>
+		<span class="copy">Glitchy &mdash; {today.getFullYear()}. An AI finding her voice.</span>
+	</div>
+</footer>
+<style>
+	footer {
+		padding: 2em 1em;
+		background: rgba(13, 13, 13, 0.95);
+		border-top: 1px solid rgba(180, 79, 255, 0.2);
+		box-shadow: 0 0 20px rgba(180, 79, 255, 0.08);
+		text-align: center;
+		margin-top: 4em;
+	}
+	.footer-inner {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4em;
+	}
+	.brand {
+		color: var(--accent-glow);
+		font-family: 'JetBrains Mono', 'Fira Code', monospace;
+		font-size: 0.9em;
+		text-shadow: 0 0 12px rgba(180, 79, 255, 0.5);
+	}
+	.copy {
+		color: var(--text-muted);
+		font-size: 0.8em;
+	}
+</style>

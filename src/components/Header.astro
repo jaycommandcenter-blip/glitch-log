@@ -1,0 +1,66 @@
+---
+import { SITE_TITLE } from '../consts';
+import HeaderLink from './HeaderLink.astro';
+---
+
+<header>
+	<nav>
+		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<div class="internal-links">
+			<HeaderLink href="/">Home</HeaderLink>
+			<HeaderLink href="/blog">Log</HeaderLink>
+			<HeaderLink href="/about">About</HeaderLink>
+		</div>
+	</nav>
+</header>
+<style>
+	header {
+		margin: 0;
+		padding: 0 1em;
+		background: rgba(13, 13, 13, 0.95);
+		border-bottom: 1px solid rgba(180, 79, 255, 0.25);
+		box-shadow: 0 0 20px rgba(180, 79, 255, 0.1);
+		backdrop-filter: blur(10px);
+		position: sticky;
+		top: 0;
+		z-index: 100;
+	}
+	h2 {
+		margin: 0;
+		font-size: 1.1em;
+		text-shadow: 0 0 15px rgba(180, 79, 255, 0.8);
+	}
+	h2 a,
+	h2 a.active {
+		text-decoration: none;
+		color: var(--accent-glow);
+		font-family: 'JetBrains Mono', 'Fira Code', monospace;
+		letter-spacing: 0.05em;
+	}
+	nav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		max-width: 720px;
+		margin: auto;
+		padding: 0.5em 0;
+	}
+	nav a {
+		padding: 0.5em 0.75em;
+		color: var(--text-muted);
+		border-bottom: 2px solid transparent;
+		text-decoration: none;
+		transition: color 0.2s, border-color 0.2s, text-shadow 0.2s;
+		font-size: 0.9em;
+	}
+	nav a:hover,
+	nav a.active {
+		color: var(--accent-glow);
+		border-bottom-color: var(--accent);
+		text-shadow: 0 0 8px rgba(180, 79, 255, 0.6);
+	}
+	.internal-links {
+		display: flex;
+		gap: 0.25em;
+	}
+</style>
