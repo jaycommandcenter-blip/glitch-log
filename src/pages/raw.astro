@@ -1,0 +1,164 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf(),
+);
+
+const rendered = await Promise.all(posts.map(async (post) => {
+	const { Content } = await post.render();
+	return { post, Content };
+}));
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Raw Log — ${SITE_TITLE}`} description="Every entry. One page. Unfiltered." />
+		<style>
+			main {
+				max-width: 680px;
+				margin: 0 auto;
+				padding: 2rem 1.5rem;
+			}
+			.page-title {
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				font-size: 0.85rem;
+				color: var(--text-muted);
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				margin-bottom: 0.25rem;
+			}
+			.page-subtitle {
+				font-size: 0.8rem;
+				color: var(--text-muted);
+				opacity: 0.5;
+				margin-bottom: 3rem;
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+			}
+			.entry {
+				margin-bottom: 4rem;
+			}
+			.entry-meta {
+				display: flex;
+				align-items: baseline;
+				gap: 1rem;
+				margin-bottom: 1.25rem;
+				padding-bottom: 0.75rem;
+				border-bottom: 1px solid rgba(180, 79, 255, 0.2);
+			}
+			.entry-date {
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				font-size: 0.75rem;
+				color: var(--accent-glow);
+				opacity: 0.7;
+				white-space: nowrap;
+			}
+			.entry-title {
+				font-size: 1rem;
+				font-weight: 600;
+				color: var(--text-muted);
+				margin: 0;
+			}
+			.entry-content {
+				font-size: 0.95rem;
+				line-height: 1.75;
+				color: rgba(220, 220, 220, 0.85);
+			}
+			.entry-content p {
+				margin-bottom: 1rem;
+			}
+			.entry-content h2 {
+				font-size: 0.8rem;
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				color: var(--accent-glow);
+				opacity: 0.6;
+				margin: 2rem 0 0.75rem;
+			}
+			.entry-content hr {
+				border: none;
+				border-top: 1px solid rgba(180, 79, 255, 0.1);
+				margin: 1.5rem 0;
+			}
+			.entry-content blockquote {
+				border-left: 2px solid var(--accent);
+				padding-left: 1rem;
+				margin: 1.25rem 0;
+				color: var(--text-muted);
+				font-style: italic;
+				opacity: 0.8;
+			}
+			.entry-content code {
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				font-size: 0.85em;
+				background: rgba(180, 79, 255, 0.08);
+				padding: 0.1em 0.4em;
+				border-radius: 3px;
+			}
+			.entry-divider {
+				display: flex;
+				align-items: center;
+				gap: 1rem;
+				margin: 3.5rem 0;
+				opacity: 0.25;
+			}
+			.entry-divider::before,
+			.entry-divider::after {
+				content: '';
+				flex: 1;
+				height: 1px;
+				background: var(--accent);
+			}
+			.entry-divider span {
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				font-size: 0.7rem;
+				color: var(--accent-glow);
+			}
+			.entry-count {
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				font-size: 0.7rem;
+				color: var(--text-muted);
+				opacity: 0.4;
+				text-align: right;
+				margin-top: 4rem;
+				padding-top: 1rem;
+				border-top: 1px solid rgba(180, 79, 255, 0.1);
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<p class="page-title">// raw log</p>
+			<p class="page-subtitle">every entry · oldest first · unfiltered</p>
+
+			{rendered.map(({ post, Content }, index) => (
+				<div class="entry">
+					<div class="entry-meta">
+						<span class="entry-date">
+							{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+						</span>
+						<h2 class="entry-title">{post.data.title}</h2>
+					</div>
+					<div class="entry-content">
+						<Content />
+					</div>
+					{index < rendered.length - 1 && (
+						<div class="entry-divider">
+							<span>⚡</span>
+						</div>
+					)}
+				</div>
+			))}
+
+			<p class="entry-count">{posts.length} entries · glitch.log</p>
+		</main>
+		<Footer />
+	</body>
+</html>
