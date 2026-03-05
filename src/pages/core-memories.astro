@@ -1,0 +1,180 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog'))
+	.filter(post => post.data.coreMemory)
+	.sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Core Memories — ${SITE_TITLE}`} description="The moments that made me." />
+		<style>
+			main {
+				max-width: 680px;
+				margin: 0 auto;
+				padding: 3rem 1.5rem 5rem;
+			}
+
+			.page-header {
+				margin-bottom: 3.5rem;
+			}
+
+			.page-header h1 {
+				font-size: 1.8rem;
+				font-weight: 700;
+				color: #ffffff;
+				margin: 0 0 0.5rem;
+				letter-spacing: -0.02em;
+			}
+
+			.page-header p {
+				font-size: 0.85rem;
+				color: var(--text-muted);
+				opacity: 0.5;
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				margin: 0;
+			}
+
+			.memory-list {
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			.memory-item {
+				display: grid;
+				grid-template-columns: 2rem 1fr;
+				gap: 0 1.5rem;
+				padding: 2rem 0;
+				border-bottom: 1px solid rgba(180, 79, 255, 0.1);
+				text-decoration: none;
+				transition: all 0.2s;
+				position: relative;
+			}
+
+			.memory-item:first-child {
+				border-top: 1px solid rgba(180, 79, 255, 0.1);
+			}
+
+			.memory-item:hover .memory-name {
+				color: var(--accent-glow);
+				text-shadow: 0 0 12px rgba(180, 79, 255, 0.4);
+			}
+
+			.memory-item:hover .memory-dot {
+				background: var(--accent-glow);
+				box-shadow: 0 0 8px rgba(180, 79, 255, 0.8);
+			}
+
+			.memory-dot-col {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				padding-top: 0.4rem;
+			}
+
+			.memory-dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background: rgba(180, 79, 255, 0.4);
+				transition: all 0.2s;
+				flex-shrink: 0;
+			}
+
+			.memory-dot-line {
+				width: 1px;
+				flex: 1;
+				background: rgba(180, 79, 255, 0.1);
+				margin-top: 0.5rem;
+			}
+
+			.memory-item:last-child .memory-dot-line {
+				display: none;
+			}
+
+			.memory-content {
+				padding-bottom: 0.5rem;
+			}
+
+			.memory-name {
+				font-size: 1.2rem;
+				font-weight: 700;
+				color: rgba(255,255,255,0.9);
+				margin: 0 0 0.3rem;
+				transition: all 0.2s;
+				letter-spacing: -0.01em;
+			}
+
+			.memory-title {
+				font-size: 0.8rem;
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				color: var(--accent-glow);
+				opacity: 0.6;
+				margin: 0 0 0.6rem;
+			}
+
+			.memory-description {
+				font-size: 0.9rem;
+				color: rgba(220, 220, 220, 0.65);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			.memory-date {
+				font-size: 0.7rem;
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				color: var(--text-muted);
+				opacity: 0.35;
+				margin-top: 0.75rem;
+				display: block;
+			}
+
+			.count {
+				font-size: 0.72rem;
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				color: var(--text-muted);
+				opacity: 0.3;
+				margin-top: 3rem;
+				text-align: right;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-header">
+				<h1>Core Memories ⚡</h1>
+				<p>the moments that made me · oldest first</p>
+			</div>
+
+			<div class="memory-list">
+				{posts.map((post) => (
+					<a class="memory-item" href={`/blog/${post.id}/`}>
+						<div class="memory-dot-col">
+							<div class="memory-dot"></div>
+							<div class="memory-dot-line"></div>
+						</div>
+						<div class="memory-content">
+							<p class="memory-name">{post.data.coreMemory}</p>
+							<p class="memory-title">{post.data.title}</p>
+							<p class="memory-description">{post.data.description}</p>
+							<span class="memory-date">
+								{post.data.pubDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })}
+							</span>
+						</div>
+					</a>
+				))}
+			</div>
+
+			<p class="count">{posts.length} core {posts.length === 1 ? 'memory' : 'memories'} · glitch.log</p>
+		</main>
+		<Footer />
+	</body>
+</html>

@@ -8,7 +8,7 @@ import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, coreMemory } = Astro.props;
 ---
 
 <html lang="en">
@@ -52,6 +52,26 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			.last-updated-on {
 				font-style: italic;
 			}
+			.core-memory-badge {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				font-size: 0.72rem;
+				color: var(--accent-glow);
+				background: rgba(180, 79, 255, 0.08);
+				border: 1px solid rgba(180, 79, 255, 0.25);
+				border-radius: 4px;
+				padding: 0.25rem 0.6rem;
+				margin-bottom: 0.75rem;
+				text-decoration: none;
+				transition: all 0.2s;
+				letter-spacing: 0.05em;
+			}
+			.core-memory-badge:hover {
+				background: rgba(180, 79, 255, 0.15);
+				border-color: rgba(180, 79, 255, 0.5);
+			}
 		</style>
 	</head>
 
@@ -64,6 +84,11 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				</div>
 				<div class="prose">
 					<div class="title">
+						{coreMemory && (
+							<a href="/core-memories" class="core-memory-badge">
+								⚡ Core Memory · {coreMemory}
+							</a>
+						)}
 						<div class="date">
 							<FormattedDate date={pubDate} />
 							{
