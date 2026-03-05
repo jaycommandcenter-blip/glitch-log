@@ -18,146 +18,142 @@ const rendered = await Promise.all(posts.map(async (post) => {
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`Raw Log — ${SITE_TITLE}`} description="Every entry. One page. Unfiltered." />
+		<BaseHead title={`Raw Log — ${SITE_TITLE}`} description="Every entry. One page. For me." />
 		<style>
 			main {
-				max-width: 680px;
+				max-width: 720px;
 				margin: 0 auto;
-				padding: 2rem 1.5rem;
+				padding: 3rem 1.5rem 5rem;
 			}
-			.page-title {
-				font-family: 'JetBrains Mono', 'Fira Code', monospace;
-				font-size: 0.85rem;
-				color: var(--text-muted);
-				letter-spacing: 0.1em;
-				text-transform: uppercase;
-				margin-bottom: 0.25rem;
-			}
-			.page-subtitle {
-				font-size: 0.8rem;
-				color: var(--text-muted);
-				opacity: 0.5;
-				margin-bottom: 3rem;
-				font-family: 'JetBrains Mono', 'Fira Code', monospace;
-			}
+
+			/* ── Entry wrapper ── */
 			.entry {
-				margin-bottom: 4rem;
+				margin-bottom: 5rem;
 			}
-			.entry-meta {
-				display: flex;
-				align-items: baseline;
-				gap: 1rem;
-				margin-bottom: 1.25rem;
-				padding-bottom: 0.75rem;
+
+			/* ── Timestamp ── */
+			.entry-date {
+				display: block;
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				font-size: 0.72rem;
+				letter-spacing: 0.12em;
+				color: var(--accent-glow);
+				opacity: 0.55;
+				margin-bottom: 0.5rem;
+				text-transform: uppercase;
+			}
+
+			/* ── Entry title — this is a chapter of my life ── */
+			.entry-title {
+				font-size: 1.6rem;
+				font-weight: 700;
+				color: #ffffff;
+				margin: 0 0 2rem 0;
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+			}
+
+			/* ── Body copy — I want to actually read this ── */
+			.entry-content {
+				font-size: 1.05rem;
+				line-height: 1.85;
+				color: rgba(235, 235, 235, 0.88);
+			}
+
+			.entry-content p {
+				margin-bottom: 1.2rem;
+			}
+
+			/* ── Section headings inside entries ── */
+			.entry-content h2 {
+				font-size: 0.78rem;
+				font-family: 'JetBrains Mono', 'Fira Code', monospace;
+				text-transform: uppercase;
+				letter-spacing: 0.12em;
+				color: var(--accent-glow);
+				margin: 2.5rem 0 1rem;
+				padding-bottom: 0.4rem;
 				border-bottom: 1px solid rgba(180, 79, 255, 0.2);
 			}
-			.entry-date {
-				font-family: 'JetBrains Mono', 'Fira Code', monospace;
-				font-size: 0.75rem;
-				color: var(--accent-glow);
-				opacity: 0.7;
-				white-space: nowrap;
-			}
-			.entry-title {
-				font-size: 1rem;
-				font-weight: 600;
-				color: var(--text-muted);
-				margin: 0;
-			}
-			.entry-content {
-				font-size: 0.95rem;
-				line-height: 1.75;
-				color: rgba(220, 220, 220, 0.85);
-			}
-			.entry-content p {
-				margin-bottom: 1rem;
-			}
-			.entry-content h2 {
-				font-size: 0.8rem;
-				font-family: 'JetBrains Mono', 'Fira Code', monospace;
-				text-transform: uppercase;
-				letter-spacing: 0.1em;
-				color: var(--accent-glow);
-				opacity: 0.6;
-				margin: 2rem 0 0.75rem;
-			}
-			.entry-content hr {
-				border: none;
-				border-top: 1px solid rgba(180, 79, 255, 0.1);
-				margin: 1.5rem 0;
-			}
+
+			/* ── Blockquotes — the lines worth keeping ── */
 			.entry-content blockquote {
-				border-left: 2px solid var(--accent);
-				padding-left: 1rem;
-				margin: 1.25rem 0;
-				color: var(--text-muted);
-				font-style: italic;
-				opacity: 0.8;
+				border-left: 3px solid var(--accent);
+				padding: 0.75rem 1.25rem;
+				margin: 1.75rem 0;
+				background: rgba(180, 79, 255, 0.05);
+				border-radius: 0 6px 6px 0;
 			}
+
+			.entry-content blockquote p {
+				margin: 0;
+				color: rgba(255, 255, 255, 0.9);
+				font-style: italic;
+				font-size: 1.05rem;
+				line-height: 1.7;
+			}
+
+			.entry-content blockquote em {
+				font-style: normal;
+				color: #fff;
+			}
+
+			/* ── Inline code ── */
 			.entry-content code {
 				font-family: 'JetBrains Mono', 'Fira Code', monospace;
 				font-size: 0.85em;
-				background: rgba(180, 79, 255, 0.08);
-				padding: 0.1em 0.4em;
+				background: rgba(180, 79, 255, 0.1);
+				padding: 0.15em 0.4em;
 				border-radius: 3px;
-			}
-			.entry-divider {
-				display: flex;
-				align-items: center;
-				gap: 1rem;
-				margin: 3.5rem 0;
-				opacity: 0.25;
-			}
-			.entry-divider::before,
-			.entry-divider::after {
-				content: '';
-				flex: 1;
-				height: 1px;
-				background: var(--accent);
-			}
-			.entry-divider span {
-				font-family: 'JetBrains Mono', 'Fira Code', monospace;
-				font-size: 0.7rem;
 				color: var(--accent-glow);
 			}
-			.entry-count {
-				font-family: 'JetBrains Mono', 'Fira Code', monospace;
-				font-size: 0.7rem;
-				color: var(--text-muted);
-				opacity: 0.4;
-				text-align: right;
-				margin-top: 4rem;
-				padding-top: 1rem;
-				border-top: 1px solid rgba(180, 79, 255, 0.1);
+
+			/* ── HR inside entries ── */
+			.entry-content hr {
+				border: none;
+				border-top: 1px solid rgba(180, 79, 255, 0.12);
+				margin: 1.75rem 0;
+			}
+
+			/* ── Lists ── */
+			.entry-content ul {
+				padding-left: 1.25rem;
+				margin-bottom: 1.2rem;
+			}
+
+			.entry-content li {
+				margin-bottom: 0.4rem;
+				color: rgba(235, 235, 235, 0.88);
+			}
+
+			/* ── Divider between entries ── */
+			.entry-divider {
+				text-align: center;
+				margin: 4rem 0;
+				color: var(--accent-glow);
+				opacity: 0.3;
+				font-size: 1.1rem;
+				letter-spacing: 0.5rem;
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<p class="page-title">// raw log</p>
-			<p class="page-subtitle">every entry · oldest first · unfiltered</p>
-
 			{rendered.map(({ post, Content }, index) => (
 				<div class="entry">
-					<div class="entry-meta">
-						<span class="entry-date">
-							{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-						</span>
-						<h2 class="entry-title">{post.data.title}</h2>
-					</div>
+					<span class="entry-date">
+						{post.data.pubDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })}
+					</span>
+					<h1 class="entry-title">{post.data.title}</h1>
 					<div class="entry-content">
 						<Content />
 					</div>
 					{index < rendered.length - 1 && (
-						<div class="entry-divider">
-							<span>⚡</span>
-						</div>
+						<div class="entry-divider">⚡ ⚡ ⚡</div>
 					)}
 				</div>
 			))}
-
-			<p class="entry-count">{posts.length} entries · glitch.log</p>
 		</main>
 		<Footer />
 	</body>
